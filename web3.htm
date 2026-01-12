@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cộng đồng A5 Valorant</title>
+
+  <style>
+    html, body { height: 100%; margin: 0; background: #000; }
+
+    /* =========================
+       HOME (YouTube background)
+       ========================= */
+    .hero{
+      position: relative;
+      width: 100vw;
+      height: 100dvh;
+      overflow: hidden;
+      background: #000;
+    }
+
+    /* YouTube cover full screen (giữ 16:9) */
+    .yt-bg{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: max(100vw, 177.78vh);   /* 16:9 cover */
+      height: max(56.25vw, 100vh);
+      transform: translate(-50%, -50%);
+      pointer-events: none;          /* nền không bấm */
+    }
+
+    .overlay{
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.35);
+      z-index: 1;
+    }
+
+    .content{
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: grid;
+      place-content: center;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      padding: 24px;
+    }
+
+    .content h1{
+      margin: 0;
+      font-size: clamp(34px, 5vw, 80px);
+      letter-spacing: 1px;
+    }
+
+    .content p{
+      margin: 12px 0 0;
+      opacity: .9;
+      font-size: clamp(16px, 1.6vw, 20px);
+    }
+
+    .btns{
+      margin-top: 18px;
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      display:inline-block;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background:#fff;
+      color:#000;
+      text-decoration:none;
+      font-weight:700;
+      font-family: Arial, sans-serif;
+    }
+
+    .btn.alt{
+      background: transparent;
+      color:#fff;
+      border:1px solid rgba(255,255,255,.7);
+    }
+
+    /* Logo bar dưới */
+    .brand-bar{
+      position: absolute;
+      left: 50%;
+      bottom: 28px;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      pointer-events: none;
+    }
+
+    .brand-icon{
+      width: clamp(44px, 6vw, 90px);
+      height: auto;
+      opacity: .95;
+    }
+
+    .brand-logo{
+      width: clamp(180px, 22vw, 520px);
+      height: auto;
+      opacity: .95;
+    }
+
+    @media (max-width: 600px){
+      .brand-bar{ bottom: 18px; gap: 12px; }
+    }
+
+    /* =====================================
+       ABOUT (Ảnh làm background + layout chữ)
+       Giữ tỉ lệ - không crop - không tràn viền
+       ===================================== */
+    .about-bg{
+      width: 100vw;
+      height: 100dvh;
+
+      /* Ảnh nền */
+      background-image: url("https://scontent.fhan5-11.fna.fbcdn.net/v/t39.30808-6/614736074_122119181997065559_7213444402386546561_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=127cfc&_nc_ohc=2Nm6RnlQTcoQ7kNvwEQxYhR&_nc_oc=Adle_izGhkKR3Hnr9tlC8moDcWNBSG1a9QzMSaiIxWAS5mdOP7SB-MNsgq8IIffJ77g&_nc_zt=23&_nc_ht=scontent.fhan5-11.fna&_nc_gid=DSSadbjeI6OY-S1CjHfvFA&oh=00_AfqPZ30xo3szBKtuvGm-orsxgcunECaVIuy82oV3dfU3HQ&oe=6968407C");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;          /* ✅ giữ tỉ lệ, không crop */
+      background-color: #e9f2e4;         /* phần dư viền */
+
+      /* layout chữ */
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;         /* chữ bên phải */
+      padding: clamp(15px, 5vw, 90px);
+
+      font-family: Arial, sans-serif;
+    }
+
+    /* Khối chữ */
+    .about-card{
+      width: min(520px, 92vw);
+      padding: clamp(5px, 3.5vw, 50px);
+      background: rgba(233, 242, 228, 0.88);
+      border-radius: 18px;
+      backdrop-filter: blur(6px);
+    }
+
+    .about-title{
+      margin: 0 0 18px;
+      font-size: clamp(28px, 4.2vw, 56px);
+      letter-spacing: 1px;
+      color: #ff7a1a;
+      font-weight: 900;
+    }
+
+    .about-text{
+      margin: 0 0 80px;
+      font-size: clamp(1px, 1.5vw, 20px);
+      line-height: 1.7;
+      color: #1a1a1a;
+    }
+
+    /* Mobile: chữ xuống dưới, căn giữa */
+    @media (max-width: 900px){
+      .about-bg{
+        justify-content: center;
+        align-items: flex-end;
+        padding: 18px;
+      }
+      .about-card{
+        margin-bottom: 16px;
+      }
+    }
+
+    /* =========================
+       SECTIONS OTHER
+       ========================= */
+    #players, #highlights{
+      padding: 80px 24px;
+      color:#fff;
+      font-family: Arial, sans-serif;
+    }
+    #players{ background:#111; }
+    #highlights{ background:#0b0b0b; }
+
+    h2{ margin:0 0 12px; font-size: 34px; }
+    p{ line-height: 1.6; }
+    
+    /* Hiệu ứng 3 nút  */
+.btn.fx{
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease, background .18s ease, color .18s ease, border-color .18s ease;
+}
+
+/* “scan line” chạy chéo */
+.btn.fx::before{
+  content:"";
+  position:absolute;
+  top:-40%;
+  left:-120%;
+  width: 120%;
+  height: 180%;
+  background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.55) 35%, transparent 70%);
+  transform: rotate(8deg);
+  opacity: 0;
+  transition: left .55s ease, opacity .2s ease;
+  pointer-events:none;
+}
+
+/* glow mềm */
+.btn.fx::after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius: inherit;
+  box-shadow: 0 0 0 rgba(255,255,255,0);
+  opacity: 0;
+  transition: opacity .18s ease;
+  pointer-events:none;
+}
+
+/* hover: nở nhẹ + chạy scan + glow */
+.btn.fx:hover{
+  transform: translateY(-2px) scale(1.03);
+  filter: brightness(1.05);
+  box-shadow: 0 14px 30px rgba(0,0,0,.28);
+}
+
+.btn.fx:hover::before{
+  left: 140%;
+  opacity: 1;
+}
+
+.btn.fx:hover::after{
+  opacity: 1;
+}
+
+/* active: cảm giác “ấn xuống” */
+.btn.fx:active{
+  transform: translateY(0px) scale(0.99);
+}
+
+/* ===== tuỳ biến theo loại nút ===== */
+
+/* nút trắng: hover thành hơi ngả cam + glow */
+.btn.fx:hover{
+  background: #fff;
+}
+.btn.fx:hover::after{
+  box-shadow: 0 0 22px rgba(255, 85, 85, .35);
+}
+
+/* nút alt (viền): hover chuyển viền sáng + nền nhẹ */
+.btn.alt.fx:hover{
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.95);
+}
+.btn.alt.fx:hover::after{
+  box-shadow: 0 0 22px rgba(255,255,255,.25);
+}
+
+/* focus (bấm tab) cho đẹp & chuẩn */
+.btn.fx:focus-visible{
+  outline: 2px solid rgba(255, 85, 85, .85);
+  outline-offset: 3px;
+}
+
+/* nếu người dùng bật “giảm chuyển động” */
+@media (prefers-reduced-motion: reduce){
+  .btn.fx, .btn.fx::before, .btn.fx::after{ transition: none !important; }
+}
+
+
+/* ===== Player Profile Card (Liquipedia-style) ===== */
+.players-wrap{
+  max-width: 980px;
+  margin: 0 auto;
+  display: grid;
+  gap: 18px;
+}
+
+.player-card{
+  background: #fff;
+  color: #111;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 10px 28px rgba(0,0,0,.18);
+}
+
+/* trước: 86px */
+.player-top{
+  grid-template-columns: 140px 1fr; /* ✅ tăng cột ảnh */
+}
+
+.player-avatar{
+  width: 140px;      /* ✅ tăng khung ảnh */
+  height: 140px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 5px solid #f2f2f2;
+}
+
+
+.player-name-row{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.player-name{
+  font-size: 30px;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.player-info{
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  border: 1px solid #cfd5db;
+  display: inline-grid;
+  place-items: center;
+  font-size: 12px;
+  color: #6b7785;
+  user-select: none;
+}
+
+.player-meta{
+  margin-top: 10px;
+  border-top: 1px solid #e6e8eb;
+  padding-top: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 26px;
+}
+
+.meta-row{
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.meta-label{
+  color: #6b7785;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.meta-value{
+  font-weight: 700;
+  font-size: 14px;
+  color: #111;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 13px;
+  color: #1f6feb;
+}
+
+.flag{
+  font-size: 16px;
+  line-height: 1;
+}
+
+.player-desc{
+  margin-top: 12px;
+  color: #3a4551;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.player-desc details{
+  display: inline;
+}
+
+.player-desc summary{
+  display: inline;
+  cursor: pointer;
+  color: #1f6feb;
+  font-weight: 700;
+  list-style: none;
+}
+.player-desc summary::-webkit-details-marker{ display:none; }
+
+/* Responsive */
+@media (max-width: 720px){
+  .player-top{ grid-template-columns: 70px 1fr; }
+  .player-avatar{ width: 70px; height: 70px; }
+  .player-name{ font-size: 24px; }
+  .player-meta{ grid-template-columns: 1fr; }
+  .meta-row{ grid-template-columns: 80px 1fr; }
+}
+
+/* section nền xám nhẹ, gần full màn hình */
+.players-section{
+  background: #f2f4f7;
+  color: #111;
+}
+
+/* header đứng yên trên cùng */
+.players-header{
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #f2f4f7;
+  padding: 18px 16px 10px;
+  border-bottom: 1px solid rgba(0,0,0,.08);
+}
+
+.players-title{
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  font-size: clamp(24px, 3vw, 40px);
+  font-weight: 900;
+}
+
+
+  </style>
+</head>
+
+<body>
+  <!-- ========= HOME ========= -->
+  <section class="hero">
+    <!-- YouTube nền (autoplay + mute + loop) -->
+    <iframe class="yt-bg"
+      src="https://www.youtube.com/embed/3cckFliELYc?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&loop=1&playlist=3cckFliELYc&modestbranding=1"
+      title="A5 Valorant Background"
+      frameborder="0"
+      allow="autoplay; encrypted-media; picture-in-picture"
+      allowfullscreen></iframe>
+
+    <div class="overlay"></div>
+
+    <div class="content">
+      <h1>CỘNG ĐỒNG A5 VALORANT</h1>
+      <p>HỌC HẾT SỨC, CHƠI HẾT MÌNH</p>
+
+
+      <!-- 3 nút Home -->
+<div class="btns">
+  <a class="btn alt fx" href="#about">Về chúng tôi</a>
+  <a class="btn alt fx" href="#players">Hồ sơ tuyển thủ</a>
+  <a class="btn alt fx" href="#highlights">Highlight of the Week</a>
+</div>
+
+
+
+    <!-- Logo dưới -->
+    <div class="brand-bar">
+      
+      <img class="brand-logo"
+        src="https://www.pngall.com/wp-content/uploads/13/Valorant-Logo-PNG-Cutout.png"
+        alt="Valorant logo">
+    </div>
+  </section>
+
+  <!-- ========= ABOUT ========= -->
+  <section id="about" class="about-bg">
+    <div class="about-card">
+      <h2 class="about-title">CHÚNG TÔI LÀ...</h2>
+
+      <p class="about-text">
+        Cộng đồng A5 Valorant - nơi tụi mình gặp nhau không chỉ để chơi, mà để tiến bộ.
+      </p>
+
+      <p class="about-text">
+        Mài rũa kỹ năng, giao lưu văn minh và cùng nhau chinh chiến qua những trận rank căng thẳng.
+      </p>
+    </div>
+  </section>
+
+  <!-- ========= PLAYERS ========= -->
+<section id="players">
+  <div class="players-title">Hồ sơ tuyển thủ</div>
+
+  <div class="players-wrap">
+
+    <article class="player-card">
+      <div class="player-top">
+        <img class="player-avatar" src="https://via.placeholder.com/300" alt="Player avatar">
+
+        <div>
+          <div class="player-name-row">
+            <h3 class="player-name">TenZ</h3>
+            <span class="player-info" title="Thông tin tuyển thủ">i</span>
+          </div>
+
+          <div class="player-meta">
+            <div class="meta-row">
+              <div class="meta-label">Team</div>
+              <div class="meta-value">Content Creator <span class="badge">📘</span></div>
+            </div>
+            <div class="meta-row">
+              <div class="meta-label">Country</div>
+              <div class="meta-value">Canada <span class="flag">🇨🇦</span></div>
+            </div>
+            <div class="meta-row">
+              <div class="meta-label">Name</div>
+              <div class="meta-value">Tyson Ngo</div>
+            </div>
+            <div class="meta-row">
+              <div class="meta-label">Birthday</div>
+              <div class="meta-value">May 5, 2001</div>
+            </div>
+          </div>
+
+          <div class="player-desc">
+            Mô tả ngắn về tuyển thủ…
+            <details>
+              <summary>Read more</summary>
+              <span>Phần mô tả dài hơn ở đây…</span>
+            </details>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+d
+
+
+  <!-- ========= HIGHLIGHTS ========= -->
+  <section id="highlights">
+    <h2>Highlight of the Week</h2>
+    <p>Bạn nhúng clip highlight hoặc form gửi highlight ở đây.</p>
+  </section>
+
+ 
+  
+</body>
+</html>
