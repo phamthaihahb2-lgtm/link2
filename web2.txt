@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cộng đồng A5 Valorant</title>
+
+  <style>
+    html, body { height: 100%; margin: 0; background: #000; }
+
+    /* =========================
+       HOME (YouTube background)
+       ========================= */
+    .hero{
+      position: relative;
+      width: 100vw;
+      height: 100dvh;
+      overflow: hidden;
+      background: #000;
+    }
+
+    /* YouTube cover full screen (giữ 16:9) */
+    .yt-bg{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: max(100vw, 177.78vh);   /* 16:9 cover */
+      height: max(56.25vw, 100vh);
+      transform: translate(-50%, -50%);
+      pointer-events: none;          /* nền không bấm */
+    }
+
+    .overlay{
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.35);
+      z-index: 1;
+    }
+
+    .content{
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: grid;
+      place-content: center;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      padding: 24px;
+    }
+
+    .content h1{
+      margin: 0;
+      font-size: clamp(34px, 5vw, 80px);
+      letter-spacing: 1px;
+    }
+
+    .content p{
+      margin: 12px 0 0;
+      opacity: .9;
+      font-size: clamp(16px, 1.6vw, 20px);
+    }
+
+    .btns{
+      margin-top: 18px;
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      display:inline-block;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background:#fff;
+      color:#000;
+      text-decoration:none;
+      font-weight:700;
+      font-family: Arial, sans-serif;
+    }
+
+    .btn.alt{
+      background: transparent;
+      color:#fff;
+      border:1px solid rgba(255,255,255,.7);
+    }
+
+    /* Logo bar dưới */
+    .brand-bar{
+      position: absolute;
+      left: 50%;
+      bottom: 28px;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      pointer-events: none;
+    }
+
+    .brand-icon{
+      width: clamp(44px, 6vw, 90px);
+      height: auto;
+      opacity: .95;
+    }
+
+    .brand-logo{
+      width: clamp(180px, 22vw, 520px);
+      height: auto;
+      opacity: .95;
+    }
+
+    @media (max-width: 600px){
+      .brand-bar{ bottom: 18px; gap: 12px; }
+    }
+
+    /* =====================================
+       ABOUT (Ảnh làm background + layout chữ)
+       Giữ tỉ lệ - không crop - không tràn viền
+       ===================================== */
+    .about-bg{
+      width: 100vw;
+      height: 100dvh;
+
+      /* Ảnh nền */
+      background-image: url("https://scontent.fhan5-11.fna.fbcdn.net/v/t39.30808-6/614736074_122119181997065559_7213444402386546561_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=127cfc&_nc_ohc=2Nm6RnlQTcoQ7kNvwEQxYhR&_nc_oc=Adle_izGhkKR3Hnr9tlC8moDcWNBSG1a9QzMSaiIxWAS5mdOP7SB-MNsgq8IIffJ77g&_nc_zt=23&_nc_ht=scontent.fhan5-11.fna&_nc_gid=DSSadbjeI6OY-S1CjHfvFA&oh=00_AfqPZ30xo3szBKtuvGm-orsxgcunECaVIuy82oV3dfU3HQ&oe=6968407C");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;          /* ✅ giữ tỉ lệ, không crop */
+      background-color: #e9f2e4;         /* phần dư viền */
+
+      /* layout chữ */
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;         /* chữ bên phải */
+      padding: clamp(18px, 5vw, 64px);
+
+      font-family: Arial, sans-serif;
+    }
+
+    /* Khối chữ */
+    .about-card{
+      width: min(520px, 92vw);
+      padding: clamp(18px, 3.5vw, 36px);
+      background: rgba(233, 242, 228, 0.88);
+      border-radius: 18px;
+      backdrop-filter: blur(6px);
+    }
+
+    .about-title{
+      margin: 0 0 18px;
+      font-size: clamp(28px, 4.2vw, 56px);
+      letter-spacing: 1px;
+      color: #ff7a1a;
+      font-weight: 900;
+    }
+
+    .about-text{
+      margin: 0 0 18px;
+      font-size: clamp(14px, 1.5vw, 18px);
+      line-height: 1.7;
+      color: #1a1a1a;
+    }
+
+    /* Mobile: chữ xuống dưới, căn giữa */
+    @media (max-width: 900px){
+      .about-bg{
+        justify-content: center;
+        align-items: flex-end;
+        padding: 18px;
+      }
+      .about-card{
+        margin-bottom: 16px;
+      }
+    }
+
+    /* =========================
+       SECTIONS OTHER
+       ========================= */
+    #players, #highlights{
+      padding: 80px 24px;
+      color:#fff;
+      font-family: Arial, sans-serif;
+    }
+    #players{ background:#111; }
+    #highlights{ background:#0b0b0b; }
+
+    h2{ margin:0 0 12px; font-size: 34px; }
+    p{ line-height: 1.6; }
+  </style>
+</head>
+
+<body>
+  <!-- ========= HOME ========= -->
+  <section class="hero">
+    <!-- YouTube nền (autoplay + mute + loop) -->
+    <iframe class="yt-bg"
+      src="https://www.youtube.com/embed/3cckFliELYc?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&loop=1&playlist=3cckFliELYc&modestbranding=1"
+      title="A5 Valorant Background"
+      frameborder="0"
+      allow="autoplay; encrypted-media; picture-in-picture"
+      allowfullscreen></iframe>
+
+    <div class="overlay"></div>
+
+    <div class="content">
+      <h1>CỘNG ĐỒNG A5 VALORANT</h1>
+      <p>HỌC HẾT SỨC, CHƠI HẾT MÌNH</p>
+
+      <!-- 3 nút Home -->
+      <div class="btns">
+        <a class="btn" href="#about">Về chúng tôi</a>
+        <a class="btn alt" href="#players">Hồ sơ tuyển thủ</a>
+        <a class="btn alt" href="#highlights">Highlight of the Week</a>
+      </div>
+    </div>
+
+    <!-- Logo dưới -->
+    <div class="brand-bar">
+      <img class="brand-icon" src="V_Bug_Positive_Red.png" alt="Valorant icon">
+      <img class="brand-logo"
+        src="https://www.pngall.com/wp-content/uploads/13/Valorant-Logo-PNG-Cutout.png"
+        alt="Valorant logo">
+    </div>
+  </section>
+
+  <!-- ========= ABOUT ========= -->
+  <section id="about" class="about-bg">
+    <div class="about-card">
+      <h2 class="about-title">CHÚNG TÔI LÀ...</h2>
+
+      <p class="about-text">
+        Cộng đồng A5 Valorant - nơi tụi mình gặp nhau không chỉ để chơi, mà để tiến bộ.
+      </p>
+
+      <p class="about-text">
+        Mài rũa kỹ năng, giao lưu văn minh và cùng nhau chinh chiến qua những trận rank căng thẳng.
+      </p>
+    </div>
+  </section>
+
+  <!-- ========= PLAYERS ========= -->
+  <section id="players">
+    <h2>Hồ sơ tuyển thủ</h2>
+    <p>Bạn để danh sách thành viên/tuyển thủ ở đây (tên, rank, role, agent tủ...).</p>
+  </section>
+
+  <!-- ========= HIGHLIGHTS ========= -->
+  <section id="highlights">
+    <h2>Highlight of the Week</h2>
+    <p>Bạn nhúng clip highlight hoặc form gửi highlight ở đây.</p>
+  </section>
+
+  <!-- LƯU Ý:
+    - ABOUT_BG_URL: thay bằng link ảnh của bạn hoặc file local (ví dụ about-bg.jpg)
+    - Nếu YouTube báo lỗi 153: có thể video bị chặn embed hoặc mở bằng file:///.
+      Cách ổn: chạy bằng localhost (Live Server / python -m http.server).
+  -->
+</body>
+</html>
